@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  cudos-explorer-sync-to-node:
+    build:
+      context: ./cudos-explorer-sync-to-node
+      dockerfile: ./Dockerfile
+    container_name: cudos-explorer-sync-to-node
+    image: cudos-explorer-sync-to-node:latest

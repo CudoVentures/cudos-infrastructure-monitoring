@@ -37,3 +37,7 @@ a simple and configurable algorithm is introduced to monitor the node itself and
  
 If the result is <= MIN_AVERAGE we may consider the current state of the node as unhealthy and an alert will be triggered 
  via Slack for further investigation.
+
+### Running the monitoring
+`$ sudo docker-compose up --build` from root
+

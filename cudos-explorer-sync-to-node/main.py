@@ -8,7 +8,7 @@ import emit
 err_free_iterations = 0
 
 
-@repeat(every(settings.SCHEDULE_TIME).seconds)
+@repeat(every(settings.SCHEDULE_TIME).minutes)
 def job():
     global err_free_iterations
     errors = checks.check_sync()
