@@ -57,6 +57,28 @@ def check_sync() -> list:
 
 
 def msg_type(msg: str) -> dict:
+    status_starting_message = {
+        "username": "Sync info",
+        "icon_emoji": ":large_green_circle:",
+        "attachments": [
+            {
+                "color": "#32D132",
+                "fields": [
+                    {
+                        "value": f"Monitoring started with the following settings \n "
+                                 f" - Monitoring status OK report every "
+                                 f"**{int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)}** minutes \n"
+                                 f" - Allowed delay tolerance for explorers: **{settings.MAX_SYNC_TOLERANCE}** blocks"
+                                 f"every **{settings.SCHEDULE_TIME}** minutes \n"
+                                 f" - Node health check: should produce minimum "
+                                 f"{int(settings.MIN_AVERAGE) * int(settings.SELF_CHECK_INTERVAL)} blocks every "
+                                 f"**{int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)}** minutes",
+                        "short": "false",
+                    }
+                ]
+            }
+        ]
+    }
     status_ok_message = {
         "username": "Sync info",
         "icon_emoji": ":large_green_circle:",
@@ -124,6 +146,8 @@ def msg_type(msg: str) -> dict:
         return status_silent_message
     elif msg == "Status - REMIND":
         return status_remind_message
+    elif msg == "Start monitoring":
+        return status_starting_message
     return {
         "username": "Sync alert",
         "icon_emoji": ":red_circle:",

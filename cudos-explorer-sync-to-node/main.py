@@ -27,6 +27,7 @@ def reminder():
 
 
 if __name__ == '__main__':
+    emit.slack(["Start monitoring"])
     while True:
         run_pending()
         time.sleep(1)
