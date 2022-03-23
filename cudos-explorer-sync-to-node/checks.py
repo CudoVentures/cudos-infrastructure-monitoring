@@ -66,13 +66,12 @@ def msg_type(msg: str) -> dict:
                 "fields": [
                     {
                         "value": f"Monitoring started!\n"
-                                 f"Settings:\n"
                                  f" - Alive Status:\n"
                                  f"     every {int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)} minutes\n"
-                                 f" - Allowed block delay:\n"
+                                 f" - Allowed Block Delay:\n"
                                  f"     {settings.MAX_SYNC_TOLERANCE} blocks per {settings.SCHEDULE_TIME} minutes\n"
-                                 f" - Node health check:\n"
-                                 f"     should produce minimum"
+                                 f" - Node Health Check:\n"
+                                 f"     minimum"
                                  f" {int(settings.MIN_AVERAGE) * int(settings.SELF_CHECK_INTERVAL)} blocks per"
                                  f" {int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)} minutes",
                         "short": "false",
