@@ -65,14 +65,16 @@ def msg_type(msg: str) -> dict:
                 "color": "#32D132",
                 "fields": [
                     {
-                        "value": f"Monitoring started with the following settings \n "
-                                 f" - Monitoring status OK report every "
-                                 f"**{int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)}** minutes \n"
-                                 f" - Allowed delay tolerance for explorers: **{settings.MAX_SYNC_TOLERANCE}** blocks"
-                                 f"every **{settings.SCHEDULE_TIME}** minutes \n"
-                                 f" - Node health check: should produce minimum "
-                                 f"{int(settings.MIN_AVERAGE) * int(settings.SELF_CHECK_INTERVAL)} blocks every "
-                                 f"**{int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)}** minutes",
+                        "value": f"Monitoring started!\n"
+                                 f"Settings:\n"
+                                 f" - Alive Status:\n"
+                                 f"     every {int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)} minutes\n"
+                                 f" - Allowed block delay:\n"
+                                 f"     {settings.MAX_SYNC_TOLERANCE} blocks per {settings.SCHEDULE_TIME} minutes\n"
+                                 f" - Node health check:\n"
+                                 f"     should produce minimum"
+                                 f" {int(settings.MIN_AVERAGE) * int(settings.SELF_CHECK_INTERVAL)} blocks per"
+                                 f" {int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)} minutes",
                         "short": "false",
                     }
                 ]
