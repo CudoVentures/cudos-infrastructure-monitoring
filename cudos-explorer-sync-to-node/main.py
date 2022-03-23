@@ -6,6 +6,7 @@ import settings
 import emit
 
 err_free_iterations = 0
+initial_reminder_time = settings.REMINDER
 
 
 @repeat(every(settings.SCHEDULE_TIME).minutes)
@@ -24,6 +25,7 @@ def job():
 def reminder():
     if settings.silent_mode():
         emit.slack(["Status - REMIND"])
+        settings.REMINDER *= 2
 
 
 if __name__ == '__main__':
@@ -34,5 +36,6 @@ if __name__ == '__main__':
         if err_free_iterations == settings.SELF_CHECK_INTERVAL:
             if settings.silent_mode():
                 settings.silent_mode("OFF")
+                settings.REMINDER = initial_reminder_time
             emit.slack(["Status - OK"])
             err_free_iterations = 0
