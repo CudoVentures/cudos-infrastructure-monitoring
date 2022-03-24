@@ -19,8 +19,8 @@ def job():
         emit.slack(errors)
         err_free_iterations = 0
         settings.silent_mode("ON")
-        checks.recorded_errors_timestamp = [datetime.datetime.now().date()]
-        checks.recorded_errors = errors
+        checks.recorded_errors_timestamp = datetime.datetime.now().date()
+        checks.recorded_errors = errors[0]
     elif not errors:
         err_free_iterations += 1
 
@@ -46,8 +46,8 @@ if __name__ == '__main__':
         if err_free_iterations == settings.SELF_CHECK_INTERVAL:
             if settings.silent_mode():
                 settings.silent_mode("OFF")
-                checks.recorded_errors_timestamp.clear()
-                checks.recorded_errors.clear()
+                checks.recorded_errors_timestamp = ""
+                checks.recorded_errors = ""
                 reminders_sent = 0
             emit.slack(["Status - OK"])
             err_free_iterations = 0

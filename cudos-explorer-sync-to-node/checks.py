@@ -6,8 +6,8 @@ import query
 import re
 
 node_stats = []
-recorded_errors_timestamp = []
-recorded_errors = []
+recorded_errors_timestamp = ""
+recorded_errors = ""
 
 
 def healthy(node_height: int) -> bool:
@@ -150,7 +150,7 @@ def msg_type(msg: str) -> dict:
             {
                 "fields": [
                     {
-                        "value": f"Unresolved error from {recorded_errors_timestamp[0]}",
+                        "value": f"Unresolved error from {recorded_errors_timestamp}",
                         "short": "false",
                     }
                 ]
@@ -164,7 +164,7 @@ def msg_type(msg: str) -> dict:
             {
                 "fields": [
                     {
-                        "value": f"Unresolved error:\n{recorded_errors[0]}",
+                        "value": f"Unresolved error:\n{recorded_errors}",
                         "short": "false",
                     }
                 ]
