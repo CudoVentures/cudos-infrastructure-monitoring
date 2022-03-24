@@ -22,7 +22,9 @@ For a correct set-up, all variables in settings.py have to be set.
    - SELF_CHECK_INTERVAL
      > Every SELF_CHECK_INTERVAL time, the script will perform a self-health check of the node.
    - REMINDER
-     > If there is unresolved problem during an active SILENT_MODE a reminder message will kick in every REMINDER minutes
+     > If there is unresolved problem during an active SILENT_MODE a reminder message will kick in every REMINDER hours.
+     To keep things simple it is a minimalistic message for the first REMINDER amount times, then increases to a reminder with a 
+     > timestamp from the recorded error and finally repeats the original error.
    - SILENT_MODE
      > This is automatically activated when an error is detected in order to avoid spamming with repeated errors. 
      It will remain active, until the error/s are dealt with and the system is back on track as expected.

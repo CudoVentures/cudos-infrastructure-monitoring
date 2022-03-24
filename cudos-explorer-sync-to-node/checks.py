@@ -6,6 +6,8 @@ import query
 import re
 
 node_stats = []
+recorded_errors_timestamp = []
+recorded_errors = []
 
 
 def healthy(node_height: int) -> bool:
@@ -23,6 +25,8 @@ def healthy(node_height: int) -> bool:
 
 def check_sync() -> list:
     errors = []
+    global recorded_errors
+    global recorded_errors_timestamp
 
     # NODE
     address = settings.NODE_API + settings.END_POINT_FOR_LAST_BLOCK
@@ -139,6 +143,34 @@ def msg_type(msg: str) -> dict:
             }
         ]
     }
+    status_timestamp_remind_message = {
+        "username": "Sync reminder",
+        "icon_emoji": ":exclamation:",
+        "attachments": [
+            {
+                "fields": [
+                    {
+                        "value": f"Unresolved error from {recorded_errors_timestamp[0]}",
+                        "short": "false",
+                    }
+                ]
+            }
+        ]
+    }
+    status_error_remind_message = {
+        "username": "Sync reminder",
+        "icon_emoji": ":rotating_light:",
+        "attachments": [
+            {
+                "fields": [
+                    {
+                        "value": f"Unresolved error:\n{recorded_errors[0]}",
+                        "short": "false",
+                    }
+                ]
+            }
+        ]
+    }
     if msg == "Status - OK":
         return status_ok_message
     elif msg == "Status - RESUME":
@@ -149,6 +181,10 @@ def msg_type(msg: str) -> dict:
         return status_remind_message
     elif msg == "Start monitoring":
         return status_starting_message
+    elif msg == "Status - REMIND with TIMESTAMP" and recorded_errors_timestamp:
+        return status_timestamp_remind_message
+    elif msg == "Status - REMIND with ERROR" and recorded_errors:
+        return status_error_remind_message
     return {
         "username": "Sync alert",
         "icon_emoji": ":red_circle:",

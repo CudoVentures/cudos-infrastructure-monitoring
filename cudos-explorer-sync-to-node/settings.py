@@ -9,11 +9,11 @@ load_dotenv()
 # SETTINGS
 
 # Global
-SCHEDULE_TIME = 5
-MAX_SYNC_TOLERANCE = 20
-MIN_AVERAGE = 5
-SELF_CHECK_INTERVAL = 3
-REMINDER = 240
+SCHEDULE_TIME = 5  # Minutes
+MAX_SYNC_TOLERANCE = 20  # Blocks
+MIN_AVERAGE = 5  # Blocks
+SELF_CHECK_INTERVAL = 3  # Minutes
+REMINDER = 4  # Hours
 SILENT_MODE = False  # Do not change manually
 
 # GCLOUD
