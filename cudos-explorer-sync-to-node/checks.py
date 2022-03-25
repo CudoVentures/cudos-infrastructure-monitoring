@@ -6,8 +6,7 @@ import query
 import re
 
 node_stats = []
-recorded_errors_timestamp = ""
-recorded_errors = ""
+recorded_errors = {}
 
 
 def healthy(node_height: int) -> bool:
@@ -26,10 +25,10 @@ def healthy(node_height: int) -> bool:
 def check_sync() -> list:
     errors = []
     global recorded_errors
-    global recorded_errors_timestamp
 
     # NODE
     address = settings.NODE_API + settings.END_POINT_FOR_LAST_BLOCK
+    node_msg = ""
     try:
         node_ip = re.search(r"\b([\d]{1,3}\.){3}[\d]{1,3}\b", address).group()
         instance = f'<{settings.GCLOUD_SEARCH + node_ip}|GCLOUD>'
@@ -38,24 +37,30 @@ def check_sync() -> list:
 
     node_height, error = query.height(address)
     if not node_height:
-        errors.append(f"{err.getting_height} node deployed @ {instance} @ {datetime.datetime.now()} {error}")
-        return errors
-    if not healthy(node_height):
-        errors.append(f"Node deployed @ {instance} might be stuck on block {node_height} "
-                      f"@ {datetime.datetime.now()}")
-        return errors
+        node_msg = f"{err.getting_height} node deployed @ {instance} @ {datetime.datetime.now()} {error}"
 
-    # Checking height of the two explorers
-    for i in range(1, 2):
-        explorer_name = f"V{i} Explorer"
-        address = settings.EXPLORER_V1_HOST if i == 1 \
-            else settings.EXPLORER_V2_HOST
-        explorer_height, error = query.height(address + settings.HEALTHCHECK_ENDPOINT)
-        if not explorer_height:
-            errors.append(f"{err.getting_height} {explorer_name} @ {datetime.datetime.now()} with error {error}")
-        elif abs(explorer_height - node_height) >= settings.MAX_SYNC_TOLERANCE:
-            errors.append(f"{explorer_name} {err.stuck_behind} {abs(explorer_height - node_height)} blocks "
-                          f"@ {datetime.datetime.now()}")
+    if not healthy(node_height):
+        node_msg = f"Node deployed @ {instance} might be stuck on block {node_height} @ {datetime.datetime.now()}"
+
+    if not node_msg:
+        # Checking height of the two explorers only if node is OK
+        for i in range(1, 3):
+            explorer_name = f"V{i} Explorer"
+            explorer_msg = ""
+            address = settings.EXPLORER_V1_HOST if i == 1 \
+                else settings.EXPLORER_V2_HOST
+            explorer_height, error = query.height(address + settings.HEALTHCHECK_ENDPOINT)
+            if not explorer_height:
+                explorer_msg = f"{err.getting_height} {explorer_name} @ {datetime.datetime.now()} with error {error}"
+            elif abs(explorer_height - node_height) >= settings.MAX_SYNC_TOLERANCE:
+                explorer_msg = f"{explorer_name} {err.stuck_behind} {abs(explorer_height - node_height)} " \
+                               f"blocks @ {datetime.datetime.now()}"
+            if explorer_msg:
+                errors.append(explorer_msg)
+                recorded_errors[explorer_name] = explorer_msg
+    else:
+        errors.append(node_msg)
+        recorded_errors[address] = node_msg
 
     return errors
 
@@ -143,34 +148,6 @@ def msg_type(msg: str) -> dict:
             }
         ]
     }
-    status_timestamp_remind_message = {
-        "username": "Sync reminder",
-        "icon_emoji": ":exclamation:",
-        "attachments": [
-            {
-                "fields": [
-                    {
-                        "value": f"Unresolved error from {recorded_errors_timestamp}",
-                        "short": "false",
-                    }
-                ]
-            }
-        ]
-    }
-    status_error_remind_message = {
-        "username": "Sync reminder",
-        "icon_emoji": ":rotating_light:",
-        "attachments": [
-            {
-                "fields": [
-                    {
-                        "value": f"Unresolved error:\n{recorded_errors}",
-                        "short": "false",
-                    }
-                ]
-            }
-        ]
-    }
     if msg == "Status - OK":
         return status_ok_message
     elif msg == "Status - RESUME":
@@ -181,10 +158,7 @@ def msg_type(msg: str) -> dict:
         return status_remind_message
     elif msg == "Start monitoring":
         return status_starting_message
-    elif msg == "Status - REMIND with TIMESTAMP" and recorded_errors_timestamp:
-        return status_timestamp_remind_message
-    elif msg == "Status - REMIND with ERROR" and recorded_errors:
-        return status_error_remind_message
+
     return {
         "username": "Sync alert",
         "icon_emoji": ":red_circle:",
