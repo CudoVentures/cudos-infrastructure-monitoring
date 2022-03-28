@@ -31,6 +31,8 @@ def reminder():
             emit.slack(list(checks.recorded_errors.values()))
             reminders_sent = 0
         reminders_sent += 1
+    else:
+        emit.slack(["Status - OK"])
 
 
 if __name__ == '__main__':
@@ -43,5 +45,4 @@ if __name__ == '__main__':
                 settings.silent_mode("OFF")
                 checks.recorded_errors.clear()
                 reminders_sent = 0
-            emit.slack(["Status - OK"])
             err_free_iterations = 0

@@ -75,8 +75,8 @@ def msg_type(msg: str) -> dict:
                 "fields": [
                     {
                         "value": f"Monitoring started!\n"
-                                 f" - Alive Status:\n"
-                                 f"     every {int(settings.SELF_CHECK_INTERVAL) * int(settings.SCHEDULE_TIME)} minutes\n"
+                                 f" - Alive Status & Reminders:\n"
+                                 f"     every {settings.REMINDER} hours\n"
                                  f" - Allowed Block Delay:\n"
                                  f"     {settings.MAX_SYNC_TOLERANCE} blocks per {settings.SCHEDULE_TIME} minutes\n"
                                  f" - Node Health Check:\n"
